@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Personal Budget Tracker{% endblock %}
+
+{% block content %}
+<h2>Welcome, {{ user.username }}!</h2>
+<p>Your current balance: ${{ balance }}</p>
+<p>Monthly spending goal: ${{ monthly_goal }}</p>
+
+<a href="{% url 'add_transaction' %}">Add a new transaction</a>
+<hr>
+<h3>Recent Transactions</h3>
+<ul>
+    {% for txn in recent_transactions %}
+        <li>{{ txn.date }} - {{ txn.category }}: ${{ txn.amount }} - {{ txn.description }}</li>
+    {% empty %}
+        <li>No recent transactions.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

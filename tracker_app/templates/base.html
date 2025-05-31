@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Personal Budget Tracker - Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 5px 5px; padding: 0;
+            background-color: #f0f2f5;
+            color: #1a1a1a;
+        }
+        header {
+            background-color: #1e3a5f;
+            color: white;
+            padding: 20px 30px;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav {
+            margin-top: 10px;
+        }
+        nav a {
+            color: #dbeafe;
+            text-decoration: none;
+            margin: 0 12px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        nav a:hover {
+            text-decoration: color: #93c5fd;;
+            background-color: deepskyblue;
+            border-radius: 20px;
+            padding: 5px;
+        }
+        main {
+            max-width: 900px;
+            margin: 30px auto;
+            background: white;
+            padding: 25px 30px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            border-radius: 6px;
+        }
+        h2 {
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+        .summary {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+        .summary div {
+            background: #eff6ff;
+            padding: 20px;
+            border-radius: 6px;
+            flex: 1;
+            margin: 0 10px;
+            text-align: center;
+        }
+        .summary div h3 {
+            margin: 0 0 10px;
+            color: #1e3a5f;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #1e3a5f;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f9ff;
+        }
+        footer {
+            text-align: center;
+            margin: 50px 0 20px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Personal Budget Tracker</h1>
+        <nav>
+            <a href="#">Dashboard</a> |
+            <a href="#">Transactions</a> |
+            <a href="#">Add Transaction</a> |
+            <a href="#">Set Goals</a> |
+            <a href="#">Reports</a>
+        </nav>
+    </header>
+    <main>
+        <h2>Dashboard - Summary</h2>
+
+        <div class="summary">
+            <div>
+                <h3>Total Income</h3>
+                <p>$3,500</p>
+            </div>
+            <div>
+                <h3>Total Expenses</h3>
+                <p>$2,100</p>
+            </div>
+            <div>
+                <h3>Balance</h3>
+                <p>$1,400</p>
+            </div>
+        </div>
+
+        <h2>Recent Transactions</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025-05-31</td>
+                    <td>Salary</td>
+                    <td>Income</td>
+                    <td>$3,000</td>
+                    <td>Credit</td>
+                </tr>
+                <tr>
+                    <td>2025-05-30</td>
+                    <td>Groceries</td>
+                    <td>Food</td>
+                    <td>$150</td>
+                    <td>Debit</td>
+                </tr>
+                <tr>
+                    <td>2025-05-29</td>
+                    <td>Electricity Bill</td>
+                    <td>Utilities</td>
+                    <td>$100</td>
+                    <td>Debit</td>
+                </tr>
+                <tr>
+                    <td>2025-05-28</td>
+                    <td>Movie Night</td>
+                    <td>Entertainment</td>
+                    <td>$50</td>
+                    <td>Debit</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <footer>
+        &copy; 2025 Personal Budget Tracker
+    </footer>
+</body>
+</html>
