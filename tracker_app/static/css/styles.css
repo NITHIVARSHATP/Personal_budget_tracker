@@ -1,119 +1,45 @@
-/* Reset some default styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* tracker_app/static/tracker_app/css/style.css */
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f7f8;
-    color: #333;
-    line-height: 1.6;
-    padding: 20px;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f0f2f5;
 }
 
 header {
-    background-color: #004aad;
+    background: #333;
     color: white;
-    padding: 15px 20px;
-    margin-bottom: 20px;
-    border-radius: 5px;
+    padding: 1rem;
 }
 
-header h1 {
-    margin-bottom: 10px;
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
 }
 
-nav a {
+nav ul li a {
     color: white;
     text-decoration: none;
-    margin-right: 15px;
-    font-weight: 600;
-    transition: color 0.3s ease;
 }
 
-nav a:hover {
-    color: #ffcc00;
+nav ul li a:hover {
+    text-decoration: underline;
 }
 
 main {
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-    min-height: 400px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 2rem;
 }
 
 footer {
     text-align: center;
-    margin-top: 30px;
-    color: #777;
-    font-size: 0.9rem;
-}
-
-/* Buttons */
-button {
-    background-color: #004aad;
+    padding: 1rem;
+    background: #333;
     color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 3px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #002f6c;
-}
-
-/* Links */
-a {
-    color: #004aad;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* Tables */
-table {
+    position: fixed;
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-
-th, td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-th {
-    background-color: #004aad;
-    color: white;
-}
-
-/* Forms */
-form {
-    max-width: 500px;
-}
-
-form input[type="text"],
-form input[type="number"],
-form input[type="date"],
-form select,
-form textarea {
-    width: 100%;
-    padding: 8px 10px;
-    margin: 8px 0 15px 0;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    font-size: 1rem;
-}
-
-form label {
-    font-weight: 600;
+    bottom: 0;
 }
