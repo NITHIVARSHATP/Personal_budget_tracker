@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Transaction List</h2>
+<table class="table table-bordered table-striped mt-3">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Amount (₹)</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>Freelance Payment</td>
+            <td>5000.00</td>
+            <td>2025-06-01</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Groceries</td>
+            <td>300.00</td>
+            <td>2025-06-02</td>
+        </tr>
+        <tr class="table-success">
+            <td>3</td>
+            <td>Salary</td>
+            <td>₹20,000.00</td>
+            <td>2025-05-31</td>
+        </tr>
+        <tr class="table-danger">
+            <td>4</td>
+            <td>Online Shopping</td>
+            <td>₹1,200.00</td>
+            <td>2025-06-01</td>
+        </tr>
+
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,16 @@
+<!-- login.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center mb-4">Login to Your Budget Tracker</h2>
+  <form method="post" class="mx-auto" style="max-width: 400px;">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary w-100 mt-3">Login</button>
+  </form>
+  <p class="text-center mt-3">
+    Don't have an account? <a href="#">Register</a> <!-- update later -->
+  </p>
+</div>
+{% endblock %}
