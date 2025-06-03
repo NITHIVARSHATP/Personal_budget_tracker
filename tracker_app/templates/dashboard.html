@@ -1,20 +1,55 @@
-{% extends "base.html" %}
-
-{% block title %}Dashboard - Personal Budget Tracker{% endblock %}
+{% extends 'base.html' %}
 
 {% block content %}
-<h2>Welcome, {{ user.username }}!</h2>
-<p>Your current balance: ${{ balance }}</p>
-<p>Monthly spending goal: ${{ monthly_goal }}</p>
+<div class="container py-4">
+  <h2 class="fw-bold text-primary mb-4">Dashboard Overview</h2>
 
-<a href="{% url 'add_transaction' %}">Add a new transaction</a>
-<hr>
-<h3>Recent Transactions</h3>
-<ul>
-    {% for txn in recent_transactions %}
-        <li>{{ txn.date }} - {{ txn.category }}: ${{ txn.amount }} - {{ txn.description }}</li>
-    {% empty %}
-        <li>No recent transactions.</li>
-    {% endfor %}
-</ul>
+  <div class="row g-4 mb-4">
+    <div class="col-md-4">
+      <div class="card text-white bg-success shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Total Income</h5>
+          <p class="card-text fs-4">₹{{ total_income }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card text-white bg-danger shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Total Expenses</h5>
+          <p class="card-text fs-4">₹{{ total_expense }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card text-white bg-primary shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Balance</h5>
+          <p class="card-text fs-4">₹{{ balance }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4 class="mb-3 text-secondary">Recent Transactions</h4>
+  {% if transactions %}
+    <ul class="list-group shadow-sm">
+      {% for txn in transactions %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <strong>{{ txn.name }}</strong>
+            <div class="text-muted small">{{ txn.date }}</div>
+          </div>
+          <span class="{% if txn.transaction_type == 'Income' %}text-success{% else %}text-danger{% endif %}">
+            ₹{{ txn.amount }}
+          </span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-muted fst-italic">No transactions available.</p>
+  {% endif %}
+</div>
 {% endblock %}
