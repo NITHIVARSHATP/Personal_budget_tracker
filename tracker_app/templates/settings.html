@@ -2,7 +2,40 @@
 
 {% block content %}
 <div class="container mt-4">
-  <h2>Settings</h2>
-  <p>Manage your account settings here. (Coming soon...)</p>
+  <h2 class="mb-4">Account Settings</h2>
+
+  <div class="card shadow-sm p-4">
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+      <!-- Username -->
+      <div class="mb-3">
+        <label for="id_username" class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" id="id_username" 
+               value="{{ user.username }}" required>
+      </div>
+
+      <!-- Email -->
+      <div class="mb-3">
+        <label for="id_email" class="form-label">Email address</label>
+        <input type="email" name="email" class="form-control" id="id_email" 
+               value="{{ user.email }}" required>
+      </div>
+
+      <!-- Avatar Upload -->
+      <div class="mb-3">
+        <label for="id_avatar" class="form-label">Profile Picture</label>
+        <input type="file" name="avatar" class="form-control" id="id_avatar" accept="image/*">
+        {% if user.profile.avatar_url %}
+          <div class="mt-2">
+            <img src="{{ user.profile.avatar_url }}" alt="Current Avatar" class="rounded-circle" width="100" height="100">
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+  </div>
 </div>
 {% endblock %}

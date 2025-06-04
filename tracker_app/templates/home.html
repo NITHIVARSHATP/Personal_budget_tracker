@@ -12,9 +12,9 @@
   <div class="row justify-content-center g-4">
     <!-- Add Transaction -->
     <div class="col-sm-6 col-md-4">
-      <a href="{% url 'add_transaction' %}" class="card h-100 text-center shadow-sm text-decoration-none text-dark card-hover">
+      <a href="{% url 'add_transaction' %}" class="card h-100 text-center shadow-sm text-decoration-none text-dark card-hover" aria-label="Add Transaction">
         <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
-          <i class="bi bi-plus-circle-fill text-success mb-3" style="font-size: 3rem;"></i>
+          <i class="bi bi-plus-circle-fill text-success mb-3" style="font-size: 3rem;" aria-hidden="true"></i>
           <h5 class="card-title mb-2">Add Transaction</h5>
           <p class="card-text text-secondary">Add income or expense entries to keep your budget updated.</p>
         </div>
@@ -23,20 +23,20 @@
 
     <!-- View Transactions -->
     <div class="col-sm-6 col-md-4">
-      <a href="{% url 'transactions_list' %}" class="card h-100 text-center shadow-sm text-decoration-none text-dark card-hover">
+      <a href="{% url 'transactions_list' %}" class="card h-100 text-center shadow-sm text-decoration-none text-dark card-hover" aria-label="View Transactions">
         <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
-          <i class="bi bi-list-task text-primary mb-3" style="font-size: 3rem;"></i>
+          <i class="bi bi-list-task text-primary mb-3" style="font-size: 3rem;" aria-hidden="true"></i>
           <h5 class="card-title mb-2">View Transactions</h5>
           <p class="card-text text-secondary">Browse your transaction history and analyze spending patterns.</p>
         </div>
       </a>
     </div>
 
-    <!-- Dashboard (Working Page) -->
+    <!-- Dashboard -->
     <div class="col-sm-6 col-md-4">
-      <a href="{% url 'dashboard' %}" class="card h-100 text-center shadow-sm text-decoration-none text-dark card-hover">
+      <a href="{% url 'dashboard' %}" class="card h-100 text-center shadow-sm text-decoration-none text-dark card-hover" aria-label="Dashboard">
         <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
-          <i class="bi bi-speedometer2 text-warning mb-3" style="font-size: 3rem;"></i>
+          <i class="bi bi-speedometer2 text-warning mb-3" style="font-size: 3rem;" aria-hidden="true"></i>
           <h5 class="card-title mb-2">Dashboard</h5>
           <p class="card-text text-secondary">Visual overview of your finances, spending habits, and insights.</p>
         </div>
@@ -45,9 +45,9 @@
 
     <!-- Login -->
     <div class="col-sm-6 col-md-4">
-      <a href="{% url 'login' %}" class="card h-100 text-center shadow-sm text-decoration-none text-dark card-hover">
+      <a href="{% url 'login' %}" class="card h-100 text-center shadow-sm text-decoration-none text-dark card-hover" aria-label="Login">
         <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
-          <i class="bi bi-box-arrow-in-right text-danger mb-3" style="font-size: 3rem;"></i>
+          <i class="bi bi-box-arrow-in-right text-danger mb-3" style="font-size: 3rem;" aria-hidden="true"></i>
           <h5 class="card-title mb-2">Login</h5>
           <p class="card-text text-muted fst-italic">Access your account securely.</p>
         </div>
@@ -56,37 +56,37 @@
 
     <!-- Register -->
     <div class="col-sm-6 col-md-4">
-      <a href="{% url 'register' %}" class="card h-100 text-center shadow-sm text-decoration-none text-dark card-hover">
+      <a href="{% url 'register' %}" class="card h-100 text-center shadow-sm text-decoration-none text-dark card-hover" aria-label="Register">
         <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
-          <i class="bi bi-person-plus text-info mb-3" style="font-size: 3rem;"></i>
+          <i class="bi bi-person-plus text-info mb-3" style="font-size: 3rem;" aria-hidden="true"></i>
           <h5 class="card-title mb-2">Register</h5>
           <p class="card-text text-muted fst-italic">Create a new account to start budgeting.</p>
         </div>
       </a>
     </div>
 
-    <!-- Reports (Under Construction) -->
+    <!-- Reports (Now Active) -->
     <div class="col-sm-6 col-md-4">
-      <div class="card h-100 text-center shadow-sm p-4">
-        <div class="card-body d-flex flex-column justify-content-center align-items-center">
-          <i class="bi bi-file-earmark-bar-graph text-secondary mb-3" style="font-size: 3rem;"></i>
+      <a href="{% url 'reports' %}" class="card h-100 text-center shadow-sm text-decoration-none text-dark card-hover" aria-label="Reports">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+          <i class="bi bi-file-earmark-bar-graph text-secondary mb-3" style="font-size: 3rem;" aria-hidden="true"></i>
           <h5 class="card-title mb-2">Reports</h5>
-          <p class="card-text text-muted fst-italic">Coming soon: download or view monthly financial reports.</p>
+          <p class="card-text text-secondary">Download or view monthly financial reports.</p>
         </div>
-      </div>
+      </a>
     </div>
 
-    <!-- Set Goal (Under Construction) -->
-    <div class="col-sm-6 col-md-4">
-      <div class="card h-100 text-center shadow-sm p-4">
-        <div class="card-body d-flex flex-column justify-content-center align-items-center">
-          <i class="bi bi-bullseye text-success mb-3" style="font-size: 3rem;"></i>
-          <h5 class="card-title mb-2">Set Goal</h5>
-          <p class="card-text text-muted fst-italic">Plan and track your savings or debt payoff goals.</p>
-        </div>
-      </div>
+    <!-- Set Goal -->
+<div class="col-sm-6 col-md-4">
+  <a href="{% url 'set_goal' %}" class="card h-100 text-center shadow-sm text-decoration-none text-dark card-hover" aria-label="Set Financial Goals">
+    <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+      <i class="bi bi-bullseye text-success mb-3" style="font-size: 3rem;" aria-hidden="true"></i>
+      <h5 class="card-title mb-2">Set Goal</h5>
+      <p class="card-text text-muted fst-italic">Plan and track your savings or debt payoff goals.</p>
     </div>
-  </div>
+  </a>
+</div>
+
 </div>
 
 <!-- Bootstrap Icons -->
@@ -105,6 +105,16 @@
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     text-decoration: none !important;
+  }
+
+  /* Disabled cards hover disable */
+  .card[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.65;
+  }
+  .card[aria-disabled="true"]:hover {
+    transform: none;
+    box-shadow: none;
   }
 
   h1, h5 {

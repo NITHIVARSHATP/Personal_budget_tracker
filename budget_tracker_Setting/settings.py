@@ -1,9 +1,10 @@
 from pathlib import Path
 from django.contrib.messages import constants as messages
+from django.core.management.utils import get_random_secret_key
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'your-secret-key'  # Replace with your own secret key
+SECRET_KEY = get_random_secret_key()
 
 DEBUG = True
 
@@ -97,3 +98,8 @@ STATICFILES_DIRS = [
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = '/login/'
 LOGIN_URL = 'login' 
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

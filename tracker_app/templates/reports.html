@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center text-primary fw-bold mb-4 animate-fade-in">Transactions Report</h2>
+
+  <!-- Table Section -->
+  <div class="table-responsive animate-slide-up">
+    <table class="table table-bordered table-striped table-hover shadow-sm rounded">
+      <thead class="table-dark">
+        <tr>
+          <th>Date</th>
+          <th>Category</th>
+          <th>Amount (₹)</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in transactions %}
+        <tr class="animate-row">
+          <td>{{ t.date }}</td>
+          <td>{{ t.category }}</td>
+          <td>₹{{ t.amount }}</td>
+          <td>{{ t.transaction_type }}</td>
+          <td>{{ t.description }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="text-center text-muted">No transactions found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Download Links -->
+  <div class="text-center mt-4 animate-fade-in">
+    <a href="{% url 'export_report_csv' %}" class="btn btn-outline-success me-2">
+      📄 Download CSV
+    </a>
+    <a href="{% url 'export_report_pdf' %}" class="btn btn-outline-danger">
+      🧾 Download PDF
+    </a>
+  </div>
+</div>
+
+<!-- CSS Animations -->
+<style>
+  .animate-fade-in {
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
+  }
+
+  .animate-slide-up {
+    transform: translateY(20px);
+    opacity: 0;
+    animation: slideUp 0.8s ease forwards;
+  }
+
+  .animate-row {
+    opacity: 0;
+    animation: fadeIn 0.8s ease-in forwards;
+  }
+
+  tbody tr:nth-child(1) { animation-delay: 0.1s; }
+  tbody tr:nth-child(2) { animation-delay: 0.2s; }
+  tbody tr:nth-child(3) { animation-delay: 0.3s; }
+  tbody tr:nth-child(4) { animation-delay: 0.4s; }
+
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+</style>
+{% endblock %}

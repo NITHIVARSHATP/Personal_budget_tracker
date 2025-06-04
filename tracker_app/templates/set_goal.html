@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center mb-4 fw-bold text-primary animate-fade-in">Set Financial Goals</h2>
+
+  <!-- Goal Form -->
+  <div class="card shadow-lg p-4 mb-5 animate-slide-up">
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-success mt-3">💾 Save Goal</button>
+    </form>
+  </div>
+
+  <!-- Goals Table -->
+  <h3 class="mb-3 fw-semibold text-secondary animate-fade-in">Your Goals</h3>
+  <div class="table-responsive animate-slide-up">
+    <table class="table table-striped table-hover align-middle shadow-sm rounded">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">Month</th>
+          <th scope="col">Category</th>
+          <th scope="col">Amount (₹)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for goal in goals %}
+        <tr class="animate-row">
+          <td>{{ goal.month|date:"F Y" }}</td>
+          <td>{{ goal.category }}</td>
+          <td>₹{{ goal.amount }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="3" class="text-center text-muted">No goals set yet.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Animation CSS -->
+<style>
+  .animate-fade-in {
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
+  }
+
+  .animate-slide-up {
+    transform: translateY(20px);
+    opacity: 0;
+    animation: slideUp 0.8s ease forwards;
+  }
+
+  .animate-row {
+    animation: fadeIn 0.8s ease-in forwards;
+    opacity: 0;
+  }
+
+  tbody tr:nth-child(1) { animation-delay: 0.1s; }
+  tbody tr:nth-child(2) { animation-delay: 0.2s; }
+  tbody tr:nth-child(3) { animation-delay: 0.3s; }
+  tbody tr:nth-child(4) { animation-delay: 0.4s; }
+  tbody tr:nth-child(5) { animation-delay: 0.5s; }
+
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  form input, form select {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s;
+  }
+
+  form input:focus, form select:focus {
+    border-color: #0d6efd;
+    outline: none;
+  }
+</style>
+{% endblock %}

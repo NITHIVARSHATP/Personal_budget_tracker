@@ -1,17 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-4">
-  <h2>Profile</h2>
-  <div class="card p-4 shadow-sm">
-    <p><strong>Username:</strong> {{ user.username }}</p>
-    <p><strong>Email:</strong> {{ user.email }}</p>
-    <!-- If you have user avatar, show it -->
-    {% if user.profile.avatar_url %}
-      <img src="{{ user.profile.avatar_url }}" alt="Avatar" class="rounded-circle" width="100" height="100">
-    {% else %}
-      <p>No avatar set.</p>
-    {% endif %}
+<div class="container mt-5">
+  <h2 class="mb-4 text-primary">Your Profile</h2>
+
+  <div class="card shadow-sm p-4" style="max-width: 500px;">
+    <div class="d-flex align-items-center gap-4 mb-4">
+      {% if user.profile.avatar_url %}
+        <img src="{{ user.profile.avatar_url }}" alt="Avatar" class="rounded-circle border" width="120" height="120">
+      {% else %}
+        <div class="bg-secondary rounded-circle d-flex justify-content-center align-items-center" style="width:120px; height:120px; color:white; font-size:3rem;">
+          <i class="bi bi-person-fill"></i>
+        </div>
+      {% endif %}
+      <div>
+        <h4 class="mb-1">{{ user.username }}</h4>
+        <p class="mb-0 text-muted">{{ user.email }}</p>
+      </div>
+    </div>
+
+    <!-- Optional Edit buttons for future enhancement -->
+    <div class="d-flex gap-3">
+      <a href="{% url 'settings' %}" class="btn btn-outline-primary flex-grow-1">Edit Profile</a>
+      <a href="{% url 'password_change' %}" class="btn btn-outline-warning flex-grow-1">Change Password</a>
+    </div>
   </div>
 </div>
 {% endblock %}
