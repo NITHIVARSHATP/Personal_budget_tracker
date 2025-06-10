@@ -18,7 +18,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'tracker_app',  # Your app
+    'tracker_app',  
 ]
 
 MIDDLEWARE = [
@@ -36,7 +36,7 @@ ROOT_URLCONF = 'budget_tracker_Setting.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],  # Your templates folder
+        'DIRS': [BASE_DIR / 'templates'],  
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -97,7 +97,7 @@ STATICFILES_DIRS = [
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = '/login/'
-LOGIN_URL = 'login' 
+LOGIN_URL = '/login/' 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

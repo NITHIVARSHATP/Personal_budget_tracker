@@ -7,10 +7,16 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from io import BytesIO
 from xhtml2pdf import pisa
-from .models import Transaction  # or your model for transactions
+from .models import Transaction  
 from .forms import FinancialGoalForm
+from .forms import TransactionForm
 from .models import FinancialGoal
+from django.contrib.auth import logout
 
+def logout_view(request):
+    logout(request)
+    return redirect('login') 
+    
 def export_report_csv(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="transactions_report.csv"'
@@ -59,13 +65,25 @@ def home_view(request):
 
 # Add Transaction View
 @login_required(login_url='login')
-def add_transaction_view(request):
-    return render(request, 'add_transaction.html')
+def add_transaction(request):
+    if request.method == 'POST':
+        form = TransactionForm(request.POST)
+        if form.is_valid():
+            transaction = form.save(commit=False)
+            transaction.user = request.user  # 🔥 Assign logged-in user
+            transaction.save()
+            return redirect('transactions_list')
+    else:
+        form = TransactionForm()
+    return render(request, 'add_transaction.html', {'form': form})
+
 
 # Transactions List View
 @login_required(login_url='login')
-def transactions_list_view(request):
-    return render(request, 'transactions_list.html')
+def transactions_list(request):
+    transactions = Transaction.objects.filter(user=request.user).order_by('-date')
+    return render(request, 'transactions_list.html', {'transactions': transactions})
+
 
 # Dashboard View
 @login_required(login_url='login')

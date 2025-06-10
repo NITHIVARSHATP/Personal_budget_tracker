@@ -1,41 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Transaction List</h2>
-<table class="table table-bordered table-striped mt-3">
-    <thead class="table-dark">
-        <tr>
-            <th>#</th>
-            <th>Title</th>
-            <th>Amount (₹)</th>
-            <th>Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>1</td>
-            <td>Freelance Payment</td>
-            <td>5000.00</td>
-            <td>2025-06-01</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Groceries</td>
-            <td>300.00</td>
-            <td>2025-06-02</td>
-        </tr>
-        <tr class="table-success">
-            <td>3</td>
-            <td>Salary</td>
-            <td>₹20,000.00</td>
-            <td>2025-05-31</td>
-        </tr>
-        <tr class="table-danger">
-            <td>4</td>
-            <td>Online Shopping</td>
-            <td>₹1,200.00</td>
-            <td>2025-06-01</td>
-        </tr>
+<div class="container py-5">
+  <h2 class="text-center mb-4">Transaction List</h2>
 
-    </tbody>
-</table>
+  {% if transactions %}
+  <table class="table table-bordered table-striped shadow-sm">
+      <thead class="table-dark">
+          <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Amount (₹)</th>
+              <th>Date</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for t in transactions %}
+          <tr class="{% if t.amount > 1000 %}table-success{% elif t.amount < 0 %}table-danger{% endif %}">
+              <td>{{ forloop.counter }}</td>
+              <td>{{ t.title }}</td>
+              <td>₹{{ t.amount }}</td>
+              <td>{{ t.date }}</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+  {% else %}
+  <p class="text-muted text-center">No transactions found.</p>
+  {% endif %}
+</div>
 {% endblock %}
