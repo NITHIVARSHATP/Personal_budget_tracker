@@ -12,7 +12,7 @@ from .views import (
     reports_view,
     export_report_csv,     
     export_report_pdf,
-    set_goal_view,
+    set_goals_view,
     add_transaction,
     transactions_list,
     logout_view
@@ -39,7 +39,8 @@ urlpatterns = [
     path('reports/', reports_view, name='reports'),
     path('export/csv/', export_report_csv, name='export_report_csv'),
     path('export/pdf/', export_report_pdf, name='export_report_pdf'),
-    path('set-goal/', set_goal_view, name='set_goal'),
+    path('set-goal/', set_goals_view, name='set_goal'),
     path('add/', add_transaction, name='add_transaction'),
     path('transactions/', transactions_list, name='transactions_list'),
+    path('transactions/delete/<int:id>/', views.delete_transaction, name='delete_transaction'),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

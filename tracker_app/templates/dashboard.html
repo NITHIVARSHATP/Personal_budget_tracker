@@ -1,55 +1,167 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<div class="container py-4">
-  <h2 class="fw-bold text-primary mb-4">Dashboard Overview</h2>
+<div class="container py-5">
+  <h2 class="text-center mb-4 text-primary">
+    <i class="bi bi-speedometer2 me-2"></i>Financial Dashboard
+  </h2>
 
-  <div class="row g-4 mb-4">
+  <!-- Month Filter -->
+  <form method="get" class="row g-3 justify-content-center mb-4">
     <div class="col-md-4">
-      <div class="card text-white bg-success shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title">Total Income</h5>
-          <p class="card-text fs-4">₹{{ total_income }}</p>
+      <select name="month" class="form-select shadow-sm">
+        {% for month in months %}
+          <option value="{{ month }}" {% if month == selected_month %}selected{% endif %}>
+            {{ month }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-primary w-100 shadow-sm">Filter</button>
+    </div>
+  </form>
+
+  <!-- Summary Cards with Income-Based Percentages -->
+  <div class="row g-4 text-center mb-5">
+    <div class="col-md-4">
+      <div class="card border-0 shadow-lg rounded-4">
+        <div class="card-body border-start border-5 border-success">
+          <h5 class="card-title text-success mb-2">
+            <i class="bi bi-arrow-down-circle-fill me-2"></i>Income
+          </h5>
+          <h3 class="fw-bold text-success">
+            ₹{{ income_total }}
+            <small class="text-muted fs-6">(100%)</small>
+          </h3>
         </div>
       </div>
     </div>
 
     <div class="col-md-4">
-      <div class="card text-white bg-danger shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title">Total Expenses</h5>
-          <p class="card-text fs-4">₹{{ total_expense }}</p>
+      <div class="card border-0 shadow-lg rounded-4">
+        <div class="card-body border-start border-5 border-danger">
+          <h5 class="card-title text-danger mb-2">
+            <i class="bi bi-arrow-up-circle-fill me-2"></i>Expenses
+          </h5>
+          <h3 class="fw-bold text-danger">
+            ₹{{ expense_total }}
+            <small class="text-muted fs-6">({{ expense_percent }}%)</small>
+          </h3>
         </div>
       </div>
     </div>
 
     <div class="col-md-4">
-      <div class="card text-white bg-primary shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title">Balance</h5>
-          <p class="card-text fs-4">₹{{ balance }}</p>
+      <div class="card border-0 shadow-lg rounded-4">
+        <div class="card-body border-start border-5 border-primary">
+          <h5 class="card-title text-primary mb-2">
+            <i class="bi bi-wallet2 me-2"></i>Balance
+          </h5>
+          <h3 class="fw-bold text-primary">
+            ₹{{ balance }}
+            <small class="text-muted fs-6">({{ balance_percent }}%)</small>
+          </h3>
         </div>
       </div>
     </div>
   </div>
 
-  <h4 class="mb-3 text-secondary">Recent Transactions</h4>
+  <!-- Chart -->
+  <div class="mb-5">
+    <canvas id="financeChart" height="120"></canvas>
+  </div>
+
+  <!-- Transaction Table -->
   {% if transactions %}
-    <ul class="list-group shadow-sm">
-      {% for txn in transactions %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <div>
-            <strong>{{ txn.name }}</strong>
-            <div class="text-muted small">{{ txn.date }}</div>
-          </div>
-          <span class="{% if txn.transaction_type == 'Income' %}text-success{% else %}text-danger{% endif %}">
-            ₹{{ txn.amount }}
-          </span>
-        </li>
-      {% endfor %}
-    </ul>
+  <div class="table-responsive">
+    <table class="table table-hover shadow-sm align-middle rounded-4 overflow-hidden">
+      <thead class="table-dark text-white">
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Amount (₹)</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in transactions %}
+        <tr class="{% if t.transaction_type == 'income' %}table-light{% else %}table-danger text-white{% endif %}">
+          <td>{{ forloop.counter }}</td>
+          <td>{{ t.title }}</td>
+          <td>₹{{ t.amount }}</td>
+          <td>{{ t.date }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
   {% else %}
-    <p class="text-muted fst-italic">No transactions available.</p>
+  <p class="text-muted text-center">No transactions found for {{ selected_month }}.</p>
   {% endif %}
 </div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Chart Script -->
+<script>
+  const incomeTotal = {{ income_total|default:"0"|safe }};
+  const expenseTotal = {{ expense_total|default:"0"|safe }};
+  const balance = {{ balance|default:"0"|safe }};
+  
+  const ctx = document.getElementById('financeChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Income', 'Expense', 'Balance'],
+      datasets: [{
+        label: '₹ Value',
+        data: [incomeTotal, expenseTotal, balance],
+        backgroundColor: [
+          'rgba(25, 135, 84, 0.7)',
+          'rgba(220, 53, 69, 0.7)',
+          'rgba(13, 110, 253, 0.7)'
+        ],
+        borderColor: [
+          'rgba(25, 135, 84, 1)',
+          'rgba(220, 53, 69, 1)',
+          'rgba(13, 110, 253, 1)'
+        ],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => '₹' + ctx.raw.toLocaleString()
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: value => '₹' + value
+          }
+        }
+      }
+    }
+  });
+</script>
+
+<!-- Custom Styling -->
+<style>
+  body {
+    background-color: #f3f8fc;
+  }
+  .card {
+    transition: transform 0.3s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+  }
+</style>
 {% endblock %}
