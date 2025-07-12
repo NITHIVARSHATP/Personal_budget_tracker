@@ -31,71 +31,93 @@
 </div>
 
 <style>
+  body {
+    background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+    min-height: 100vh;
+    font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
+    color: #232946;
+  }
+
   /* Gradient Text for Title */
   .gradient-text {
-    background: linear-gradient(90deg, #ff6a00, #ee0979);
+    background: linear-gradient(90deg, #3a1c71, #d76d77, #ffaf7b);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    letter-spacing: 1px;
+    font-size: 2.2rem;
+    font-weight: 900;
+    text-shadow: 0 4px 24px rgba(58, 28, 113, 0.10);
   }
 
   /* Profile Card Gradient Background */
   .profile-card {
-    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-    border-radius: 20px;
-    color: #333;
+    background: linear-gradient(135deg, #f8fafc 0%, #e0c3fc 100%);
+    border-radius: 24px;
+    color: #232946;
+    box-shadow: 0 8px 32px rgba(58, 28, 113, 0.10), 0 2px 8px rgba(141, 153, 174, 0.10);
+    max-width: 480px;
   }
 
   /* Avatar Glow */
   .avatar-glow {
-    box-shadow: 0 0 15px 4px rgba(255, 105, 180, 0.6);
-    transition: box-shadow 0.4s ease;
+    box-shadow: 0 0 18px 6px rgba(58, 28, 113, 0.18);
+    transition: box-shadow 0.4s cubic-bezier(.4,2,.3,1);
   }
   .avatar-glow:hover {
-    box-shadow: 0 0 25px 8px rgba(255, 105, 180, 0.9);
+    box-shadow: 0 0 32px 12px rgba(58, 28, 113, 0.25);
   }
 
   /* Username and Email Text */
   .username-text {
-    font-weight: 700;
-    font-size: 1.5rem;
-    color: #5a189a;
-    transition: color 0.3s ease;
+    font-weight: 800;
+    font-size: 1.6rem;
+    color: #3a1c71;
+    letter-spacing: 0.5px;
+    transition: color 0.3s;
   }
   .username-text:hover {
-    color: #9d4edd;
+    color: #5f27cd;
   }
   .email-text {
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 500;
     color: #6a4c93;
+    letter-spacing: 0.2px;
   }
 
   /* Gradient Buttons */
   .btn-gradient-primary {
-    background: linear-gradient(45deg, #3a1c71, #d76d77, #ffaf7b);
+    background: linear-gradient(90deg, #3a1c71 0%, #5f27cd 50%, #43cea2 100%);
     border: none;
-    color: white;
-    font-weight: 600;
-    transition: background 0.4s ease, transform 0.3s ease;
-    border-radius: 12px;
+    color: #fff;
+    font-weight: 700;
+    transition: background 0.3s, transform 0.2s;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(67, 206, 162, 0.10);
   }
-  .btn-gradient-primary:hover {
-    background: linear-gradient(45deg, #ffaf7b, #d76d77, #3a1c71);
-    transform: scale(1.05);
+  .btn-gradient-primary:hover, .btn-gradient-primary:focus {
+    background: linear-gradient(90deg, #43cea2 0%, #5f27cd 50%, #3a1c71 100%);
+    color: #fff;
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 4px 16px rgba(67, 206, 162, 0.18);
   }
 
   .btn-gradient-warning {
-    background: linear-gradient(45deg, #f7971e, #ffd200);
+    background: linear-gradient(90deg, #ffd200 0%, #f7971e 100%);
     border: none;
     color: #3a1c71;
-    font-weight: 600;
-    transition: background 0.4s ease, transform 0.3s ease;
-    border-radius: 12px;
+    font-weight: 700;
+    transition: background 0.3s, color 0.2s, transform 0.2s;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(247, 151, 30, 0.10);
   }
-  .btn-gradient-warning:hover {
-    background: linear-gradient(45deg, #ffd200, #f7971e);
-    color: #5a189a;
-    transform: scale(1.05);
+  .btn-gradient-warning:hover, .btn-gradient-warning:focus {
+    background: linear-gradient(90deg, #f7971e 0%, #ffd200 100%);
+    color: #5f27cd;
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 4px 16px rgba(247, 151, 30, 0.18);
   }
 
   /* Animate Fade-in */
@@ -104,9 +126,13 @@
     animation: fadeIn 1s ease forwards;
   }
   @keyframes fadeIn {
-    to {
-      opacity: 1;
-    }
+    to { opacity: 1; }
+  }
+  @media (max-width: 600px) {
+    .profile-card { padding: 2rem 1rem !important; }
+    .gradient-text { font-size: 1.4rem; }
+    .username-text { font-size: 1.1rem; }
+    .email-text { font-size: 0.95rem; }
   }
 </style>
 {% endblock %}

@@ -30,80 +30,95 @@
 
 <style>
   body {
-    background: linear-gradient(to right, #f8f9fa, #e7eaf6);
+    background: linear-gradient(120deg, #f8fafc 0%, #fceabb 100%);
     font-family: 'Segoe UI', sans-serif;
     overflow-x: hidden;
+    min-height: 100vh;
   }
 
   .transaction-card {
-    background-color: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-    border: 1px solid #dee2e6;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: rgba(255,255,255,0.85);
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(242, 139, 130, 0.10), 0 2px 8px rgba(255, 183, 94, 0.10);
+    border: 1.5px solid #ffe0c3;
+    backdrop-filter: blur(8px);
+    transition: transform 0.3s, box-shadow 0.3s;
   }
-
   .transaction-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 50px rgba(0, 0, 0, 0.12);
+    transform: translateY(-7px) scale(1.01);
+    box-shadow: 0 16px 48px rgba(242, 139, 130, 0.18);
   }
 
   .btn-blush {
-    background-color: #f28b82;
+    background: linear-gradient(90deg, #f28b82 0%, #ffb75e 100%);
     border: none;
-    color: white;
-    font-weight: 600;
-    padding: 10px 20px;
-    border-radius: 10px;
-    transition: all 0.3s ease;
+    color: #fff;
+    font-weight: 700;
+    padding: 12px 24px;
+    border-radius: 12px;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(242, 139, 130, 0.10);
+    letter-spacing: 0.5px;
   }
-
-  .btn-blush:hover {
-    background-color: #e57373;
-    transform: scale(1.03);
-    box-shadow: 0 4px 12px rgba(242, 139, 130, 0.4);
+  .btn-blush:hover, .btn-blush:focus {
+    background: linear-gradient(90deg, #ffb75e 0%, #f28b82 100%);
+    color: #fff;
+    transform: scale(1.04);
+    box-shadow: 0 6px 18px rgba(242, 139, 130, 0.18);
   }
 
   .text-navy {
     color: #2c3e50;
   }
-
   .text-blush {
-    color: #f28b82;
+    background: linear-gradient(90deg, #f28b82 0%, #ffb75e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    font-weight: 900;
+  }
+
+  .form-wrapper {
+    background: rgba(255,255,255,0.6);
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(242, 139, 130, 0.06);
+    padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+    margin-bottom: 1.2rem;
+    border: 1px solid #ffe0c3;
   }
 
   input[type="text"],
   input[type="number"],
   select,
   textarea {
-    border-radius: 10px;
-    border: 1px solid #ced4da;
-    padding: 12px;
+    border-radius: 12px;
+    border: 1.5px solid #ffd6c0;
+    padding: 14px;
     width: 100%;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
     font-size: 1rem;
-    background-color: #fafafa;
-    transition: all 0.3s ease;
+    background-color: #fff9f6;
+    transition: border 0.3s, box-shadow 0.3s, background 0.3s;
     opacity: 0;
     transform: translateY(20px);
     animation: slideUp 0.6s ease forwards;
     animation-delay: 0.3s;
   }
-
   input:focus,
   select:focus,
   textarea:focus {
     border-color: #f28b82;
-    box-shadow: 0 0 0 0.2rem rgba(242, 139, 130, 0.25);
-    background-color: #ffffff;
+    box-shadow: 0 0 0 0.2rem rgba(242, 139, 130, 0.18);
+    background-color: #fff;
     outline: none;
   }
-
   label {
-    font-weight: 600;
-    color: #555;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.2px;
   }
-
   @keyframes slideUp {
     to {
       opacity: 1;

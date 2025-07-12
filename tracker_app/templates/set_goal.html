@@ -45,18 +45,73 @@
 <!-- Styling -->
 <style>
   body {
-    background: #eefaf1;
+    background: linear-gradient(120deg, #e0f7fa 0%, #e8f5e9 100%);
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+  }
+  .container {
+    max-width: 900px;
+  }
+  .last-goal {
+    background: rgba(255,255,255,0.85);
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(76, 175, 80, 0.10), 0 2px 8px rgba(76, 175, 80, 0.08);
+    border: 1.5px solid #b2f2bb;
+    padding: 1.5rem 2rem 1.2rem 2rem;
+    margin-bottom: 2rem;
+    color: #388e3c;
+    font-weight: 600;
+  }
+  .last-goal h3 {
+    color: #2e7d32;
+    font-weight: 800;
+    margin-bottom: 0.7rem;
   }
   .form-control {
-    border-radius: 12px;
+    border-radius: 14px;
+    border: 1.5px solid #b2f2bb;
+    padding: 14px;
+    font-size: 1rem;
+    background-color: #f9fff9;
+    transition: border 0.3s, box-shadow 0.3s, background 0.3s;
+  }
+  .form-control:focus {
+    border-color: #43ea7f;
+    box-shadow: 0 0 0 0.2rem rgba(67, 234, 127, 0.18);
+    background-color: #fff;
+    outline: none;
   }
   .btn-success {
+    background: linear-gradient(90deg, #43ea7f 0%, #11998e 100%);
+    border: none;
+    color: #fff;
     border-radius: 25px;
     font-weight: bold;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    padding: 10px 32px;
+    box-shadow: 0 2px 8px rgba(67, 234, 127, 0.10);
+    transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-success:hover, .btn-success:focus {
+    background: linear-gradient(90deg, #11998e 0%, #43ea7f 100%);
+    color: #fff;
+    transform: scale(1.04);
+    box-shadow: 0 6px 18px rgba(67, 234, 127, 0.18);
+  }
+  .form-label {
+    font-weight: 700;
+    color: #11998e;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.2px;
   }
   .goal-alert {
     max-width: 600px;
     margin: 0 auto;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    box-shadow: 0 2px 12px rgba(67, 234, 127, 0.10);
   }
 </style>
 

@@ -20,7 +20,7 @@
 </thead>
   <tbody>
     {% for t in transactions %}
-    <tr>
+    <tr class="{% if t.transaction_type == 'Income' %}row-income{% elif t.transaction_type == 'Expense' %}row-expense{% else %}row-other{% endif %}">
       <td>{{ t.date }}</td>
       <td>{{ t.category }}</td>
       <td>₹{{ t.amount }}</td>
@@ -56,40 +56,82 @@
 
 <style>
   body {
-    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    background: linear-gradient(120deg, #f5f7fa 0%, #c3cfe2 100%);
     font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
   }
 
   .text-navy {
     color: #2c3e50;
   }
 
+  .table {
+    background: rgba(255,255,255,0.85);
+    border-radius: 1.2rem;
+    box-shadow: 0 8px 32px rgba(44, 62, 80, 0.10), 0 2px 8px rgba(44, 62, 80, 0.08);
+    overflow: hidden;
+  }
+
   .table th, .table td {
     vertical-align: middle;
     text-align: center;
-  }
-
-  .table tbody tr:hover {
-    background-color: #f9f9f9;
-    transform: scale(1.01);
-  }
-
-  .bg-success-subtle {
-    background-color: #d4edda;
-  }
-
-  .bg-danger-subtle {
-    background-color: #f8d7da;
-  }
-
-  .bg-warning-subtle {
-    background-color: #fff3cd;
+    border: none;
+    font-size: 1.05rem;
   }
 
   .table thead {
+    background: linear-gradient(90deg, #a1c4fd 0%, #c2e9fb 100%);
+    color: #2c3e50;
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.5px;
+    border-bottom: 2px solid #e3e6ed;
+  }
+
+  .table tbody tr {
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .table tbody tr:hover {
+    background: rgba(161, 196, 253, 0.13);
+    transform: scale(1.01);
+    box-shadow: 0 2px 12px rgba(44, 62, 80, 0.08);
+  }
+
+  /* Color-coded rows */
+  .row-income td {
+    background: linear-gradient(90deg, #d4fc79 0%, #96e6a1 100%);
+    color: #226644;
+    font-weight: 600;
+  }
+
+  .row-expense td {
+    background: linear-gradient(90deg, #f7971e 0%, #ffd200 100%);
+    color: #7a3b00;
+    font-weight: 600;
+  }
+
+  .row-other td {
+    background: linear-gradient(90deg, #f5f7fa 0%, #c3cfe2 100%);
+    color: #2c3e50;
+  }
+
+  .btn-delete-transaction {
+    background: linear-gradient(90deg, #ff5858 0%, #f09819 100%);
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 6px 18px;
+    box-shadow: 0 2px 8px rgba(255, 88, 88, 0.10);
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-delete-transaction:hover, .btn-delete-transaction:focus {
+    background: linear-gradient(90deg, #f09819 0%, #ff5858 100%);
+    color: #fff;
+    transform: scale(1.07);
+    box-shadow: 0 4px 16px rgba(255, 88, 88, 0.18);
   }
 
   .rounded-4 {

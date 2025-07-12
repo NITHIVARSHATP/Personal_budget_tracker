@@ -50,7 +50,77 @@
 
 <style>
   body {
-    background: #f8f9fa;
+    background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+  }
+  .container {
+    max-width: 700px;
+  }
+  .card {
+    background: rgba(255,255,255,0.92);
+    border-radius: 22px;
+    box-shadow: 0 8px 32px rgba(52, 78, 134, 0.10), 0 2px 8px rgba(52, 78, 134, 0.08);
+    padding: 2.5rem 2rem 2rem 2rem;
+    margin-top: 2rem;
+  }
+  h2 {
+    font-weight: 800;
+    background: linear-gradient(90deg, #3b82f6 0%, #6366f1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+  }
+  .form-label {
+    font-weight: 700;
+    color: #3b82f6;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.2px;
+  }
+  .form-control {
+    border-radius: 12px;
+    border: 1.5px solid #b6c6e6;
+    padding: 13px;
+    font-size: 1rem;
+    background-color: #f7faff;
+    transition: border 0.3s, box-shadow 0.3s, background 0.3s;
+  }
+  .form-control:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.18);
+    background-color: #fff;
+    outline: none;
+  }
+  .btn-primary {
+    background: linear-gradient(90deg, #3b82f6 0%, #6366f1 100%);
+    border: none;
+    color: #fff;
+    font-weight: 800;
+    border-radius: 25px;
+    padding: 12px 0;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.10);
+    transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover, .btn-primary:focus {
+    background: linear-gradient(90deg, #6366f1 0%, #3b82f6 100%);
+    color: #fff;
+    transform: scale(1.03);
+    box-shadow: 0 6px 18px rgba(59, 130, 246, 0.18);
+  }
+  .rounded-circle {
+    border: 3px solid #3b82f6;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.10);
+    transition: box-shadow 0.3s;
+  }
+  .rounded-circle:hover {
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.18);
+  }
+  .text-muted {
+    color: #6b7280 !important;
   }
 </style>
 {% endblock %}
