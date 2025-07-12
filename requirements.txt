@@ -8,6 +8,7 @@ charset-normalizer==3.4.2
 cryptography==45.0.3
 cssselect2==0.8.0
 Django==5.2.1
+django-widget-tweaks==1.5.0
 gunicorn==23.0.0
 html5lib==1.1
 idna==3.10

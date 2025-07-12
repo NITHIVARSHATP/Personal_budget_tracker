@@ -1,18 +1,26 @@
 {% extends 'base.html' %}
+
 {% block content %}
 <div class="container py-5">
+
+  <!-- Goal Alert -->
+  {% if goal_alert %}
+    <div class="alert {% if "exceeded" in goal_alert %}alert-danger{% else %}alert-success{% endif %} animate__animated animate__fadeIn mb-4 text-center fw-bold shadow-sm">
+      {{ goal_alert }}
+    </div>
+  {% endif %}
+
+  <!-- Dashboard Heading -->
   <h2 class="text-center mb-4 text-primary">
-    <i class="bi bi-speedometer2 me-2"></i>Financial Dashboard
+    <i class="bi bi-speedometer2 me-2"></i> Financial Dashboard
   </h2>
 
   <!-- Month Filter -->
   <form method="get" class="row g-3 justify-content-center mb-4">
     <div class="col-md-4">
-      <select name="month" class="form-select shadow-sm">
+      <select name="month" class="form-select shadow-sm" aria-label="Select month">
         {% for month in months %}
-          <option value="{{ month }}" {% if month == selected_month %}selected{% endif %}>
-            {{ month }}
-          </option>
+          <option value="{{ month }}" {% if month == selected_month %}selected{% endif %}>{{ month }}</option>
         {% endfor %}
       </select>
     </div>
@@ -21,16 +29,32 @@
     </div>
   </form>
 
-  <!-- Summary Cards with Income-Based Percentages -->
+  <!-- Progress Bar for Monthly Expense Goal -->
+  {% if expense_progress_percent is not None %}
+    <div class="mb-5">
+      <h5 class="fw-bold mb-2 text-center text-dark">Monthly Expense Goal Progress</h5>
+      <div class="progress rounded-pill" style="height: 30px;">
+        <div class="progress-bar {% if expense_progress_percent >= 100 %}bg-danger{% else %}bg-success{% endif %}"
+             role="progressbar"
+             style="width: {{ expense_progress_percent }}%;"
+             aria-valuenow="{{ expense_progress_percent }}"
+             aria-valuemin="0" aria-valuemax="100">
+          {{ expense_progress_percent }}%
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Summary Cards -->
   <div class="row g-4 text-center mb-5">
     <div class="col-md-4">
       <div class="card border-0 shadow-lg rounded-4">
         <div class="card-body border-start border-5 border-success">
           <h5 class="card-title text-success mb-2">
-            <i class="bi bi-arrow-down-circle-fill me-2"></i>Income
+            <i class="bi bi-arrow-down-circle-fill me-2"></i> Income
           </h5>
           <h3 class="fw-bold text-success">
-            ₹{{ income_total }}
+            ₹{{ income_total|floatformat:2 }}
             <small class="text-muted fs-6">(100%)</small>
           </h3>
         </div>
@@ -41,10 +65,10 @@
       <div class="card border-0 shadow-lg rounded-4">
         <div class="card-body border-start border-5 border-danger">
           <h5 class="card-title text-danger mb-2">
-            <i class="bi bi-arrow-up-circle-fill me-2"></i>Expenses
+            <i class="bi bi-arrow-up-circle-fill me-2"></i> Expenses
           </h5>
           <h3 class="fw-bold text-danger">
-            ₹{{ expense_total }}
+            ₹{{ expense_total|floatformat:2 }}
             <small class="text-muted fs-6">({{ expense_percent }}%)</small>
           </h3>
         </div>
@@ -55,10 +79,10 @@
       <div class="card border-0 shadow-lg rounded-4">
         <div class="card-body border-start border-5 border-primary">
           <h5 class="card-title text-primary mb-2">
-            <i class="bi bi-wallet2 me-2"></i>Balance
+            <i class="bi bi-wallet2 me-2"></i> Balance
           </h5>
           <h3 class="fw-bold text-primary">
-            ₹{{ balance }}
+            ₹{{ balance|floatformat:2 }}
             <small class="text-muted fs-6">({{ balance_percent }}%)</small>
           </h3>
         </div>
@@ -73,42 +97,41 @@
 
   <!-- Transaction Table -->
   {% if transactions %}
-  <div class="table-responsive">
-    <table class="table table-hover shadow-sm align-middle rounded-4 overflow-hidden">
-      <thead class="table-dark text-white">
-        <tr>
-          <th>#</th>
-          <th>Title</th>
-          <th>Amount (₹)</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for t in transactions %}
-        <tr class="{% if t.transaction_type == 'income' %}table-light{% else %}table-danger text-white{% endif %}">
-          <td>{{ forloop.counter }}</td>
-          <td>{{ t.title }}</td>
-          <td>₹{{ t.amount }}</td>
-          <td>{{ t.date }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+    <div class="table-responsive">
+      <table class="table table-hover shadow-sm align-middle rounded-4 overflow-hidden">
+        <thead class="table-dark text-white">
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Amount (₹)</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in transactions %}
+            <tr class="{% if t.transaction_type == 'income' %}table-light{% else %}table-danger text-white{% endif %}">
+              <td>{{ forloop.counter }}</td>
+              <td>{{ t.title }}</td>
+              <td>₹{{ t.amount|floatformat:2 }}</td>
+              <td>{{ t.date|date:"M d, Y" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   {% else %}
-  <p class="text-muted text-center">No transactions found for {{ selected_month }}.</p>
+    <p class="text-muted text-center">No transactions found for {{ selected_month }}.</p>
   {% endif %}
+
 </div>
 
-<!-- Chart.js CDN -->
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- Chart Script -->
 <script>
   const incomeTotal = {{ income_total|default:"0"|safe }};
   const expenseTotal = {{ expense_total|default:"0"|safe }};
   const balance = {{ balance|default:"0"|safe }};
-  
+
   const ctx = document.getElementById('financeChart').getContext('2d');
   new Chart(ctx, {
     type: 'bar',
@@ -152,16 +175,28 @@
   });
 </script>
 
-<!-- Custom Styling -->
+<!-- Styling -->
 <style>
   body {
     background-color: #f3f8fc;
   }
+
   .card {
     transition: transform 0.3s ease;
   }
+
   .card:hover {
     transform: translateY(-4px);
+  }
+
+  .progress {
+    background-color: #e0eafc;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .progress-bar {
+    font-weight: 600;
+    font-size: 1rem;
   }
 </style>
 {% endblock %}

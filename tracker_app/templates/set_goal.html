@@ -2,11 +2,11 @@
 
 {% block content %}
 {% if last_goal %}
-  <div class="last-goal">
+  <div class="last-goal mb-4">
     <h3>Your last saved goal:</h3>
-    <p><strong>Income_Goal:</strong> {{ last_goal.income_goal }}</p>
-    <p><strong>Expense_Goal:</strong> {{ last_goal.expense_goal}}</p>
-    <p><strong>Month:</strong> {{ last_goal.month  }}</p>
+    <p><strong>Income Goal:</strong> ₹{{ last_goal.income_goal }}</p>
+    <p><strong>Expense Goal:</strong> ₹{{ last_goal.expense_goal }}</p>
+    <p><strong>Month:</strong> {{ last_goal.month }}</p>
     <p><em>Set on: {{ last_goal.created_at|date:"F j, Y" }}</em></p>
   </div>
 {% else %}
@@ -18,7 +18,7 @@
     <i class="bi bi-bullseye"></i> Set Your Monthly Financial Goals
   </h2>
 
-  <form method="POST" class="row g-4 justify-content-center">
+  <form method="POST" class="row g-4 justify-content-center" id="goalForm">
     {% csrf_token %}
     
     <div class="col-md-4">
@@ -42,6 +42,7 @@
   </form>
 </div>
 
+<!-- Styling -->
 <style>
   body {
     background: #eefaf1;
@@ -53,5 +54,50 @@
     border-radius: 25px;
     font-weight: bold;
   }
+  .goal-alert {
+    max-width: 600px;
+    margin: 0 auto;
+  }
 </style>
+
+<!-- AJAX Script to handle form and update alert -->
+<script>
+document.querySelector('#goalForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const formData = new FormData(this);
+
+  fetch("", {
+    method: "POST",
+    headers: {
+      'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+      'X-Requested-With': 'XMLHttpRequest'
+    },
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    // Update last-goal section
+    document.querySelector('.last-goal').innerHTML = `
+      <h3>Your last saved goal:</h3>
+      <p><strong>Income Goal:</strong> ₹${data.income_goal}</p>
+      <p><strong>Expense Goal:</strong> ₹${data.expense_goal}</p>
+      <p><strong>Month:</strong> ${data.month}</p>
+      <p><em>Set on: ${data.created_at}</em></p>
+    `;
+
+    // Remove any previous alert
+    const oldAlert = document.querySelector('.goal-alert');
+    if (oldAlert) oldAlert.remove();
+
+    // Create and insert new alert
+    const alert = document.createElement('div');
+    alert.className = `alert goal-alert mt-4 text-center fw-bold shadow-sm animate__animated animate__fadeIn ${data.expense_progress >= 100 ? 'alert-danger' : 'alert-success'}`;
+    alert.innerText = data.goal_alert;
+
+    document.querySelector('.container').prepend(alert);
+  })
+  .catch(err => console.error('Failed to save goal:', err));
+});
+</script>
 {% endblock %}

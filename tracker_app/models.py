@@ -32,17 +32,24 @@ class FinancialGoal(models.Model):
 
 class Goal(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    month = models.CharField(max_length=20)  # e.g., "July 2025"
     income_goal = models.DecimalField(max_digits=10, decimal_places=2)
     expense_goal = models.DecimalField(max_digits=10, decimal_places=2)
-    month = models.CharField(max_length=20)
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'month')  # Enforce one goal per user per month
+
     def __str__(self):
-        return f"Goal for {self.month} by {self.user.username}"
-    
+        return f"{self.user.username} - {self.month}"
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
-    
-    def __str__(self):
-        return f"{self.user.username}'s Profile"
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+
+    @property
+    def avatar_url(self):
+        if self.avatar:
+            return self.avatar.url
+        return ''
