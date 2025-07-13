@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from .models import FinancialGoal, Transaction, Profile, Goal
+from datetime import datetime
 
 # -----------------------------
 # Transaction Form
@@ -107,12 +108,22 @@ class StyledPasswordChangeForm(PasswordChangeForm):
 # -----------------------------
 # Monthly Goal Form (for AJAX goal setting)
 # -----------------------------
+# forms.py
+
 class GoalForm(forms.ModelForm):
     class Meta:
         model = Goal
         fields = ['month', 'income_goal', 'expense_goal']
         widgets = {
-            'month': forms.TextInput(attrs={'placeholder': 'e.g., July 2025', 'class': 'form-control'}),
+            'month': forms.DateInput(attrs={'type': 'month', 'class': 'form-control'}),
             'income_goal': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
             'expense_goal': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
         }
+
+    def clean_month(self):
+        month_input = self.cleaned_data['month']  # '2025-07'
+        try:
+            dt = datetime.strptime(month_input, "%Y-%m")
+            return dt.strftime("%B %Y")  # "July 2025"
+        except ValueError:
+            raise forms.ValidationError("Invalid month format. Expected YYYY-MM.")

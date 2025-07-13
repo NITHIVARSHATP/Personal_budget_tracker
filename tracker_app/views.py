@@ -148,53 +148,69 @@ def transactions_list(request):
     transactions = Transaction.objects.filter(user=request.user).order_by('-date')
     return render(request, 'transactions_list.html', {'transactions': transactions})
 
+
 @login_required
 def dashboard_view(request):
-    month_label = request.GET.get("month", datetime.now().strftime("%B %Y"))
+    # 1. Get selected month or default to current
+    month_label = request.GET.get("month", now().strftime("%B %Y"))
 
     try:
-        selected_month_number = datetime.strptime(month_label, "%B %Y").month
-        selected_year = datetime.strptime(month_label, "%B %Y").year
+        selected_date = datetime.strptime(month_label, "%B %Y")
     except ValueError:
-        selected_month_number = datetime.now().month
-        selected_year = datetime.now().year
-        month_label = datetime.now().strftime("%B %Y")
+        selected_date = now()
 
-    # Filter transactions
+    selected_month_number = selected_date.month
+    selected_year = selected_date.year
+    month_label = selected_date.strftime("%B %Y")  # Reformat
+
+    # 2. Get all transactions by the user
     all_transactions = Transaction.objects.filter(user=request.user)
+
+    # 3. Filter transactions by selected month
     transactions = all_transactions.filter(
         date__month=selected_month_number,
         date__year=selected_year
     )
 
-    # Unique months for dropdown
-    months = sorted(set(t.date.strftime("%B %Y") for t in all_transactions), reverse=True)
+    # 4. Build the month dropdown from all available transactions
+    months = sorted(
+        set(t.date.strftime("%B %Y") for t in all_transactions),
+        reverse=True
+    )
 
-    # Totals
+    # 5. Totals
     income_total = sum(t.amount for t in transactions if t.transaction_type == 'income')
     expense_total = sum(t.amount for t in transactions if t.transaction_type == 'expense')
     balance = income_total - expense_total
 
-    # Percentages
-    if income_total > 0:
-        expense_percent = round((expense_total / income_total) * 100, 2)
-        balance_percent = round((balance / income_total) * 100, 2)
-    else:
-        expense_percent = 0
-        balance_percent = 0
+    # 6. Percentages
+    expense_percent = round((expense_total / income_total) * 100, 2) if income_total > 0 else 0
+    balance_percent = round((balance / income_total) * 100, 2) if income_total > 0 else 0
 
-    # ➕ GOAL ALERT LOGIC
+    # 7. Goal Progress and Alert (Match Goal.month as DATE field)
     goal_alert = None
     expense_progress_percent = None
-    goal = Goal.objects.filter(user=request.user, month=month_label).first()
-    if goal:
-        expense_progress_percent = round((expense_total / goal.expense_goal) * 100, 2) if goal.expense_goal else 0
-        if expense_total > goal.expense_goal:
-            goal_alert = f"⚠️ You have exceeded your expense goal of ₹{goal.expense_goal} for {month_label}."
-        else:
-            remaining = goal.expense_goal - expense_total
-            goal_alert = f"✅ You still have ₹{remaining:.2f} left to spend for {month_label}."
+    try:
+        goal_month = selected_date.strftime("%B %Y")  # ➤ "July 2025"
+        goal = Goal.objects.filter(user=request.user, month=goal_month).first()
 
+        if goal:
+            # Calculate progress toward the monthly goal
+            if goal.expense_goal > 0:
+                expense_progress_percent = round((expense_total / goal.expense_goal) * 100, 2)
+            else:
+                expense_progress_percent = 0
+
+            # Set alert message
+            if expense_total > goal.expense_goal:
+                goal_alert = f"⚠️ You have exceeded your expense goal of ₹{goal.expense_goal:.2f} for {month_label}."
+            else:
+                remaining = goal.expense_goal - expense_total
+                goal_alert = f"✅ You still have ₹{remaining:.2f} left to spend for {month_label}."
+    except Exception as e:
+        goal_alert = None  # Optional: log error
+
+    # 8. Render context
     return render(request, 'dashboard.html', {
         'transactions': transactions,
         'income_total': income_total,
