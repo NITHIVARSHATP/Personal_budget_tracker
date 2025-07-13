@@ -19,6 +19,9 @@ from decimal import Decimal
 from django.utils.dateparse import parse_date
 from datetime import datetime
 from django.db.models import Sum
+from django.utils.timezone import now
+from .models import Goal
+from .forms import GoalForm
 
 def logout_view(request):
     logout(request)
@@ -78,57 +81,38 @@ def export_report_pdf(request):
     
     return response
 
+
 @login_required
 def set_goals_view(request):
-    if request.method == "POST":
-        income_goal = float(request.POST.get('income_goal'))
-        expense_goal = float(request.POST.get('expense_goal'))
-        month_input = request.POST.get('month')  # "2025-07"
-
-        try:
-            month_dt = datetime.strptime(month_input, "%Y-%m")
-            month_str = month_dt.strftime("%B %Y")  # "July 2025"
-        except:
-            return JsonResponse({'error': 'Invalid month format'}, status=400)
-
-        # Update or create goal
-        goal, created = Goal.objects.update_or_create(
-            user=request.user,
-            month=month_str,
-            defaults={
-                'income_goal': income_goal,
-                'expense_goal': expense_goal
-            }
-        )
-
-        # Optionally calculate progress/alert like before
-        expense_total = Transaction.objects.filter(
-            user=request.user,
-            date__month=month_dt.month,
-            date__year=month_dt.year,
-            transaction_type='expense'
-        ).aggregate(total=Sum('amount'))['total'] or 0
-
-        expense_progress = round((expense_total / Decimal(expense_goal)) * 100, 2) if expense_goal else 0
-
-        alert = (
-            f"⚠️ You have exceeded your expense goal of ₹{expense_goal:.2f} for {month_str}."
-            if expense_total > expense_goal
-            else f"✅ You still have ₹{Decimal(expense_goal) - expense_total:.2f} left to spend for {month_str}."
-        )
-
-        return JsonResponse({
-            'income_goal': income_goal,
-            'expense_goal': expense_goal,
-            'month': month_str,
-            'created_at': goal.created_at.strftime("%B %d, %Y"),
-            'expense_progress': expense_progress,
-            'goal_alert': alert
-        })
-
-    # GET: Show last goal
     last_goal = Goal.objects.filter(user=request.user).order_by('-created_at').first()
-    return render(request, 'set_goal.html', {'last_goal': last_goal})
+
+    if request.method == "POST" and request.headers.get("x-requested-with") == "XMLHttpRequest":
+        form = GoalForm(request.POST)
+        if form.is_valid():
+            month = form.cleaned_data['month']
+            income_goal = form.cleaned_data['income_goal']
+            expense_goal = form.cleaned_data['expense_goal']
+
+            goal, created = Goal.objects.update_or_create(
+                user=request.user,
+                month=month,
+                defaults={'income_goal': income_goal, 'expense_goal': expense_goal}
+            )
+
+            progress = (goal.expense_goal / goal.income_goal) * 100 if goal.income_goal > 0 else 0
+
+            return JsonResponse({
+                "income_goal": float(goal.income_goal),
+                "expense_goal": float(goal.expense_goal),
+                "month": goal.month,
+                "created_at": goal.created_at.strftime('%B %d, %Y'),
+                "expense_progress": round(progress, 2),
+                "goal_alert": "You’ve exceeded your budget!" if progress >= 100 else "Great job staying within your budget!"
+            })
+        else:
+            return JsonResponse({"error": "Invalid form"}, status=400)
+
+    return render(request, "set_goal.html", {"last_goal": last_goal})
 
 def home_view(request):
     tiles = [

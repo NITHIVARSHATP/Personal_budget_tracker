@@ -1,89 +1,59 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
-from .models import FinancialGoal,Transaction,Profile
-from django.contrib.auth.forms import PasswordChangeForm
+from .models import FinancialGoal, Transaction, Profile, Goal
 
+# -----------------------------
+# Transaction Form
+# -----------------------------
 class TransactionForm(forms.ModelForm):
     CATEGORY_CHOICES = [
-    ('Salary', 'Salary'),
-    ('Bonus', 'Bonus'),
-    ('Freelance', 'Freelance'),
-    ('Interest Income', 'Interest Income'),
-    ('Investment Returns', 'Investment Returns'),
-    ('Rental Income', 'Rental Income'),
-    ('Refund', 'Refund'),
-    ('Gift Received', 'Gift Received'),
+        ('Salary', 'Salary'), ('Bonus', 'Bonus'), ('Freelance', 'Freelance'),
+        ('Interest Income', 'Interest Income'), ('Investment Returns', 'Investment Returns'),
+        ('Rental Income', 'Rental Income'), ('Refund', 'Refund'), ('Gift Received', 'Gift Received'),
 
-    ('Food', 'Food'),
-    ('Groceries', 'Groceries'),
-    ('Dining Out', 'Dining Out'),
-    ('Snacks', 'Snacks'),
-    ('Rent', 'Rent'),
-    ('Mortgage', 'Mortgage'),
-    ('Utilities', 'Utilities'),
-    ('Electricity', 'Electricity'),
-    ('Water', 'Water'),
-    ('Internet', 'Internet'),
-    ('Phone', 'Phone'),
+        ('Food', 'Food'), ('Groceries', 'Groceries'), ('Dining Out', 'Dining Out'),
+        ('Snacks', 'Snacks'), ('Rent', 'Rent'), ('Mortgage', 'Mortgage'),
+        ('Utilities', 'Utilities'), ('Electricity', 'Electricity'), ('Water', 'Water'),
+        ('Internet', 'Internet'), ('Phone', 'Phone'),
 
-    ('Transportation', 'Transportation'),
-    ('Fuel', 'Fuel'),
-    ('Public Transport', 'Public Transport'),
-    ('Taxi / Ride-share', 'Taxi / Ride-share'),
-    ('Vehicle Maintenance', 'Vehicle Maintenance'),
+        ('Transportation', 'Transportation'), ('Fuel', 'Fuel'), ('Public Transport', 'Public Transport'),
+        ('Taxi / Ride-share', 'Taxi / Ride-share'), ('Vehicle Maintenance', 'Vehicle Maintenance'),
 
-    ('Healthcare', 'Healthcare'),
-    ('Doctor Visit', 'Doctor Visit'),
-    ('Medicines', 'Medicines'),
-    ('Insurance Premium', 'Insurance Premium'),
+        ('Healthcare', 'Healthcare'), ('Doctor Visit', 'Doctor Visit'),
+        ('Medicines', 'Medicines'), ('Insurance Premium', 'Insurance Premium'),
 
-    ('Education', 'Education'),
-    ('Tuition', 'Tuition'),
-    ('Books & Supplies', 'Books & Supplies'),
-    ('Online Courses', 'Online Courses'),
+        ('Education', 'Education'), ('Tuition', 'Tuition'),
+        ('Books & Supplies', 'Books & Supplies'), ('Online Courses', 'Online Courses'),
 
-    ('Entertainment', 'Entertainment'),
-    ('Movies', 'Movies'),
-    ('Streaming Services', 'Streaming Services'),
-    ('Events & Concerts', 'Events & Concerts'),
-    
-    ('Personal Care', 'Personal Care'),
-    ('Salon & Spa', 'Salon & Spa'),
-    ('Clothing', 'Clothing'),
-    ('Accessories', 'Accessories'),
+        ('Entertainment', 'Entertainment'), ('Movies', 'Movies'),
+        ('Streaming Services', 'Streaming Services'), ('Events & Concerts', 'Events & Concerts'),
 
-    ('Travel', 'Travel'),
-    ('Lodging', 'Lodging'),
-    ('Flights', 'Flights'),
-    ('Vacation Packages', 'Vacation Packages'),
+        ('Personal Care', 'Personal Care'), ('Salon & Spa', 'Salon & Spa'),
+        ('Clothing', 'Clothing'), ('Accessories', 'Accessories'),
 
-    ('Savings', 'Savings'),
-    ('Investments', 'Investments'),
-    ('Emergency Fund', 'Emergency Fund'),
+        ('Travel', 'Travel'), ('Lodging', 'Lodging'), ('Flights', 'Flights'),
+        ('Vacation Packages', 'Vacation Packages'),
 
-    ('Charity', 'Charity'),
-    ('Gifts', 'Gifts'),
-    ('Donations', 'Donations'),
+        ('Savings', 'Savings'), ('Investments', 'Investments'), ('Emergency Fund', 'Emergency Fund'),
 
-    ('Business Expense', 'Business Expense'),
-    ('Subscription', 'Subscription'),
-    ('Software', 'Software'),
+        ('Charity', 'Charity'), ('Gifts', 'Gifts'), ('Donations', 'Donations'),
 
-    ('Other', 'Other'),
-]
+        ('Business Expense', 'Business Expense'), ('Subscription', 'Subscription'), ('Software', 'Software'),
 
+        ('Other', 'Other'),
+    ]
 
     category = forms.ChoiceField(choices=CATEGORY_CHOICES)
-    date = forms.DateField(
-        widget=forms.DateInput(attrs={'type': 'date'}),
-        required=True
-    )
+    date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=True)
 
     class Meta:
         model = Transaction
         fields = ['amount', 'category', 'transaction_type', 'description', 'date']
-        
+
+# -----------------------------
+# User Registration Form
+# -----------------------------
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
@@ -91,8 +61,9 @@ class RegisterForm(UserCreationForm):
         model = User
         fields = ["username", "email", "password1", "password2"]
 
-
-
+# -----------------------------
+# Financial Goal Form
+# -----------------------------
 class FinancialGoalForm(forms.ModelForm):
     class Meta:
         model = FinancialGoal
@@ -101,6 +72,9 @@ class FinancialGoalForm(forms.ModelForm):
             'month': forms.DateInput(attrs={'type': 'month'}),
         }
 
+# -----------------------------
+# User Info Update Form
+# -----------------------------
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
@@ -110,6 +84,9 @@ class UserForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
         }
 
+# -----------------------------
+# Profile Avatar Form
+# -----------------------------
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
@@ -118,9 +95,24 @@ class ProfileForm(forms.ModelForm):
             'avatar': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
 
-
+# -----------------------------
+# Password Change Form (Styled)
+# -----------------------------
 class StyledPasswordChangeForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'})
+
+# -----------------------------
+# Monthly Goal Form (for AJAX goal setting)
+# -----------------------------
+class GoalForm(forms.ModelForm):
+    class Meta:
+        model = Goal
+        fields = ['month', 'income_goal', 'expense_goal']
+        widgets = {
+            'month': forms.TextInput(attrs={'placeholder': 'e.g., July 2025', 'class': 'form-control'}),
+            'income_goal': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+            'expense_goal': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+        }

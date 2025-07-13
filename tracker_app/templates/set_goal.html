@@ -1,41 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% if last_goal %}
-  <div class="last-goal mb-4">
-    <h3>Your last saved goal:</h3>
-    <p><strong>Income Goal:</strong> ₹{{ last_goal.income_goal }}</p>
-    <p><strong>Expense Goal:</strong> ₹{{ last_goal.expense_goal }}</p>
-    <p><strong>Month:</strong> {{ last_goal.month }}</p>
-    <p><em>Set on: {{ last_goal.created_at|date:"F j, Y" }}</em></p>
-  </div>
-{% else %}
-  <p>You have no saved goals yet.</p>
-{% endif %}
-
 <div class="container py-5">
+  <!-- AJAX-updated Goal Alert -->
+  <div id="goal-alert-wrapper"></div>
+
+  <!-- Last Saved Goal -->
+  <div id="last-goal-section" class="last-goal mb-4 {% if not last_goal %}d-none{% endif %}">
+    <h3>Your last saved goal:</h3>
+    <p><strong>Income Goal:</strong> ₹<span id="income-goal">{{ last_goal.income_goal }}</span></p>
+    <p><strong>Expense Goal:</strong> ₹<span id="expense-goal">{{ last_goal.expense_goal }}</span></p>
+    <p><strong>Month:</strong> <span id="goal-month">{{ last_goal.month }}</span></p>
+    <p><em>Set on: <span id="goal-date">{{ last_goal.created_at|date:"F j, Y" }}</span></em></p>
+  </div>
+
+  <!-- Goal Form -->
   <h2 class="text-center mb-4 text-success">
     <i class="bi bi-bullseye"></i> Set Your Monthly Financial Goals
   </h2>
 
   <form method="POST" class="row g-4 justify-content-center" id="goalForm">
     {% csrf_token %}
-    
     <div class="col-md-4">
       <label for="month" class="form-label fw-bold">Month</label>
       <input type="month" id="month" name="month" class="form-control" required>
     </div>
-
     <div class="col-md-4">
       <label for="income_goal" class="form-label fw-bold">Income Goal (₹)</label>
       <input type="number" id="income_goal" name="income_goal" class="form-control" min="0" step="0.01" required>
     </div>
-
     <div class="col-md-4">
       <label for="expense_goal" class="form-label fw-bold">Expense Limit (₹)</label>
       <input type="number" id="expense_goal" name="expense_goal" class="form-control" min="0" step="0.01" required>
     </div>
-
     <div class="col-12 text-center mt-3">
       <button type="submit" class="btn btn-success px-4">Save Goals</button>
     </div>
@@ -53,71 +50,44 @@
     max-width: 900px;
   }
   .last-goal {
-    background: rgba(255,255,255,0.85);
+    background: rgba(255, 255, 255, 0.9);
     border-radius: 18px;
-    box-shadow: 0 4px 24px rgba(76, 175, 80, 0.10), 0 2px 8px rgba(76, 175, 80, 0.08);
-    border: 1.5px solid #b2f2bb;
-    padding: 1.5rem 2rem 1.2rem 2rem;
-    margin-bottom: 2rem;
-    color: #388e3c;
-    font-weight: 600;
-  }
-  .last-goal h3 {
+    box-shadow: 0 4px 24px rgba(76, 175, 80, 0.1);
+    border-left: 5px solid #43ea7f;
+    padding: 1.5rem 2rem;
     color: #2e7d32;
-    font-weight: 800;
-    margin-bottom: 0.7rem;
+    font-weight: 600;
   }
   .form-control {
     border-radius: 14px;
-    border: 1.5px solid #b2f2bb;
     padding: 14px;
     font-size: 1rem;
     background-color: #f9fff9;
-    transition: border 0.3s, box-shadow 0.3s, background 0.3s;
   }
   .form-control:focus {
     border-color: #43ea7f;
-    box-shadow: 0 0 0 0.2rem rgba(67, 234, 127, 0.18);
+    box-shadow: 0 0 0 0.2rem rgba(67, 234, 127, 0.2);
     background-color: #fff;
     outline: none;
   }
   .btn-success {
     background: linear-gradient(90deg, #43ea7f 0%, #11998e 100%);
     border: none;
-    color: #fff;
     border-radius: 25px;
     font-weight: bold;
     font-size: 1.1rem;
-    letter-spacing: 0.5px;
-    padding: 10px 32px;
-    box-shadow: 0 2px 8px rgba(67, 234, 127, 0.10);
-    transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
-  }
-  .btn-success:hover, .btn-success:focus {
-    background: linear-gradient(90deg, #11998e 0%, #43ea7f 100%);
     color: #fff;
-    transform: scale(1.04);
-    box-shadow: 0 6px 18px rgba(67, 234, 127, 0.18);
-  }
-  .form-label {
-    font-weight: 700;
-    color: #11998e;
-    margin-bottom: 0.3rem;
-    letter-spacing: 0.2px;
   }
   .goal-alert {
-    max-width: 600px;
-    margin: 0 auto;
-    border-radius: 16px;
-    font-size: 1.1rem;
+    max-width: 700px;
+    margin: 0 auto 1rem;
+    border-radius: 14px;
     font-weight: 700;
-    box-shadow: 0 2px 12px rgba(67, 234, 127, 0.10);
+    padding: 1rem 1.5rem;
   }
 </style>
-
-<!-- AJAX Script to handle form and update alert -->
 <script>
-document.querySelector('#goalForm').addEventListener('submit', function(e) {
+document.getElementById('goalForm').addEventListener('submit', function (e) {
   e.preventDefault();
 
   const formData = new FormData(this);
@@ -130,29 +100,38 @@ document.querySelector('#goalForm').addEventListener('submit', function(e) {
     },
     body: formData
   })
-  .then(res => res.json())
-  .then(data => {
-    // Update last-goal section
-    document.querySelector('.last-goal').innerHTML = `
-      <h3>Your last saved goal:</h3>
-      <p><strong>Income Goal:</strong> ₹${data.income_goal}</p>
-      <p><strong>Expense Goal:</strong> ₹${data.expense_goal}</p>
-      <p><strong>Month:</strong> ${data.month}</p>
-      <p><em>Set on: ${data.created_at}</em></p>
-    `;
-
-    // Remove any previous alert
-    const oldAlert = document.querySelector('.goal-alert');
-    if (oldAlert) oldAlert.remove();
-
-    // Create and insert new alert
-    const alert = document.createElement('div');
-    alert.className = `alert goal-alert mt-4 text-center fw-bold shadow-sm animate__animated animate__fadeIn ${data.expense_progress >= 100 ? 'alert-danger' : 'alert-success'}`;
-    alert.innerText = data.goal_alert;
-
-    document.querySelector('.container').prepend(alert);
+  .then(res => {
+    if (!res.ok) throw new Error("Network response was not OK");
+    return res.json();
   })
-  .catch(err => console.error('Failed to save goal:', err));
+  .then(data => {
+    if (data.error) throw new Error(data.error);
+
+    // Reveal last goal section if hidden
+    const lastGoalSection = document.getElementById("last-goal-section");
+    lastGoalSection.classList.remove("d-none");
+
+    // Update values
+    document.getElementById("income-goal").innerText = data.income_goal;
+    document.getElementById("expense-goal").innerText = data.expense_goal;
+    document.getElementById("goal-month").innerText = data.month;
+    document.getElementById("goal-date").innerText = data.created_at;
+
+    // Goal Alert
+    const alertDiv = document.createElement("div");
+    alertDiv.className = `alert goal-alert text-center fw-bold animate__animated animate__fadeIn ${data.expense_progress >= 100 ? "alert-danger" : "alert-success"}`;
+    alertDiv.innerText = data.goal_alert;
+
+    const alertWrapper = document.getElementById("goal-alert-wrapper");
+    alertWrapper.innerHTML = "";
+    alertWrapper.appendChild(alertDiv);
+  })
+  .catch(err => {
+    console.error("Save failed:", err);
+    alert("⚠️ An error occurred while saving your goal.");
+  });
 });
 </script>
+
+
 {% endblock %}
